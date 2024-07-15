@@ -11,3 +11,7 @@ The file `loan_default_prediction.ipynb` contains EDA, binary classifier model t
 ## Serving API Example
 
 The `api` directory contains a Dockerfile and Python code that implements a simple REST API for serving the trained model.
+
+To build the Docker image, navigate to the `api` directory and run:
+
+`docker build -t api .`

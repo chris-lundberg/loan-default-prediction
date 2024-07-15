@@ -1,0 +1,4 @@
+fastapi
+lightgbm
+python-multipart
+ray[serve]
