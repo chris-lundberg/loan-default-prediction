@@ -1,23 +1,48 @@
 import lightgbm as lgb
-from starlette.requests import Request
-from ray import serve
 
-@serve.deployment(num_replicas=2, ray_actor_options={"num_cpus": 0.2, "num_gpus": 0})
-class LoanClassifier:
-    def __init__(self, model_file: str="lgbm_model.txt"):
-        # Load model
-        self.model = lgb.Booster(model_file=model_file)
+from contextlib import asynccontextmanager
 
-    def classify(self, features: list) -> str:
-        # Run inference
-        model_output = self.model.predict(features)
+from fastapi import FastAPI
+from pydantic import BaseModel
 
-        return {"result": model_output}
+ml_models = {}
+
+model_file = "lgbm_model.txt"
+
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+
+    ml_models["loan_classifier"] = lgb.Booster(model_file=model_file)
+    yield
+
+    ml_models.clear()
+
+app = FastAPI(lifespan=lifespan)
+
+class LoanApplication(BaseModel):
+
+    loan_amnt: float
+    int_rate: float
+    installment: float
+    annual_inc: float
+    dti: float
+    open_acc: float
+    pub_rec: float
+    revol_bal: float
+    revol_util: float
+    total_acc: float
+    mort_acc: float
+    pub_rec_bankruptcies: float
+
+class LendingDecision(BaseModel):
+
+    result: float
     
-    async def __call__(self, starlette_request: Request) -> dict:
-        payload = await starlette_request.json()
+@app.post("/predict/")
+async def classify(features: LoanApplication) -> LendingDecision:
 
-        input_vector = list(payload.values())
-        return self.classify([input_vector])
+    features = list(features.model_dump().values())
 
-loan_default_app = LoanClassifier.bind()
+    model_output = ml_models["loan_classifier"].predict([features])
+
+    return {"result": model_output}
