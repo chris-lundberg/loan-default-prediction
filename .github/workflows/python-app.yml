@@ -15,6 +15,5 @@ jobs:
         python-version: '3.x'
     - name: Lint 
       run: |
-        pip install ruff mypy docformatter yapf
-        mypy --install-types
+        pip install ruff mypy docformatter yapf pandas-stubs
         make lint
