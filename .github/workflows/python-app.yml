@@ -16,4 +16,5 @@ jobs:
     - name: Lint 
       run: |
         pip install ruff mypy docformatter yapf
+        mypy --install-types
         make lint
