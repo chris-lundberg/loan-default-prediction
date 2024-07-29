@@ -36,6 +36,10 @@ MANIFEST
 pip-log.txt
 pip-delete-this-directory.txt
 
+# Linting
+*.ruff_cache/
+*.mypy_cache/
+
 # Unit test / coverage reports
 htmlcov/
 .tox/

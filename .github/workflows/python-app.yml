@@ -13,8 +13,7 @@ jobs:
       uses: actions/setup-python@v5
       with:
         python-version: '3.x'
-    - name: Lint with Ruff
+    - name: Lint 
       run: |
-        pip install ruff
-        ruff check --output-format=github .
-      continue-on-error: true
+        pip install ruff mypy docformatter yapf
+        make lint

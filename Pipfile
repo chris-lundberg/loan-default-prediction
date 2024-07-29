@@ -15,6 +15,10 @@ nbformat = "*"
 ipykernel = "*"
 
 [dev-packages]
+ruff = "*"
+mypy = "*"
+yapf = "*"
+docformatter = "*"
 
 [requires]
 python_version = "3.8"
