@@ -10,6 +10,9 @@ lightgbm = "*"
 seaborn = "*"
 optuna = "*"
 optuna-integration = {extras = ["lightgbm"], version = "*"}
+plotly = "*"
+nbformat = "*"
+ipykernel = "*"
 
 [dev-packages]
 
